@@ -13,7 +13,7 @@ main.o: main.c
 	$(CC) -c $(CFLAGS) main.c
 
 snakes: snakes.o main.o
-	$(CC) $(CFLAGS) -o snakes snakes.o main.o $(LDFLAGS)
+	$(CC) $(CFLAGS) -o snakes snakes.o main.o $(LDFLAGS) -lpthread
 
 
 
