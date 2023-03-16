@@ -4,7 +4,14 @@
 #define FOOD 'X'
 #define BASESPEED 50000
 
+struct snakeNode {
+  chtype direction;
+  struct snakeNode *next;
+};
+
 void Setup(void);
 void PrintGameName(WINDOW *win, int startRow);
-void InitSnake(void);
-void ChangeDirection(chtype direction);
+struct snakeNode* InitSnake(void);
+void ChangeDirection(chtype direction, struct snakeNode *head);
+
+
