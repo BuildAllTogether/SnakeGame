@@ -5,10 +5,6 @@
 #include "snakes.h"
 
 
-void Setup(void);
-void PrintGameName(WINDOW *win, int startRow);
-void InitSnake(void);
-
 void Setup(void) {
   /* WINDOW *currentWindow = stdscr; */
   
@@ -43,9 +39,13 @@ void InitSnake(void) {
 
   mvaddch(midY, midX, ACS_DARROW);
   refresh();
-  usleep(500000);
+}
 
-  mvaddch(midY, midX, ACS_UARROW);
+void ChangeDirection(chtype direction) {
+  int midY = (LINES - 3) / 2;
+  int midX = (COLS - 1) / 2;
+  
+  mvaddch(midY, midX, direction);
   refresh();
 }
 
