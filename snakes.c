@@ -1,5 +1,5 @@
 #include <stdlib.h>
-
+#include <time.h>
 #include <curses.h>
 
 #include "snakes.h"
@@ -42,6 +42,10 @@ void InitSnake(void) {
   int midX = (COLS - 1) / 2;
 
   mvaddch(midY, midX, ACS_DARROW);
+  refresh();
+  usleep(500000);
+
+  mvaddch(midY, midX, ACS_UARROW);
   refresh();
 }
 
