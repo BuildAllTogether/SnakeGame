@@ -1,7 +1,6 @@
 
 #define SNAKEHEADSTART 'd'
 #define SNAKEBODY 'O'
-#define FOOD 'X'
 #define BASESPEED 500000
 
 #define UP 1

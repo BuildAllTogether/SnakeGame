@@ -3,7 +3,7 @@
 #include <curses.h>
 
 #include "snakes.h"
-
+#include "food.h"
 
 void Setup(void) {
   /* WINDOW *currentWindow = stdscr; */
@@ -13,7 +13,7 @@ void Setup(void) {
 
   PrintGameName(stdscr, 1);
   box(border, 0, 0);
-
+  AddFood();
   refresh();
   wrefresh(border);
 

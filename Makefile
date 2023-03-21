@@ -9,11 +9,14 @@ all: snakes
 snakes.o: snakes.c
 	$(CC) -c $(CFLAGS) snakes.c
 
+food.o: food.c
+	$(CC) -c $(CFLAGS) food.c
+
 main.o: main.c
 	$(CC) -c $(CFLAGS) main.c
 
-snakes: snakes.o main.o
-	$(CC) $(CFLAGS) -o snakes snakes.o main.o $(LDFLAGS) -lpthread
+snakes: snakes.o food.o main.o
+	$(CC) $(CFLAGS) -o snakes snakes.o food.o main.o $(LDFLAGS) -lpthread
 
 
 
