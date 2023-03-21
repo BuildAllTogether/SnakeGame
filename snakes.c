@@ -5,32 +5,8 @@
 #include "snakes.h"
 #include "food.h"
 
-void Setup(void) {
-  /* WINDOW *currentWindow = stdscr; */
-  
-  WINDOW *border = newwin(LINES - 3, COLS - 1, 2, 0);
-  refresh();
 
-  PrintGameName(stdscr, 1);
-  box(border, 0, 0);
-  AddFood();
-  refresh();
-  wrefresh(border);
-
-
-}
-
-void PrintGameName(WINDOW *win, int startRow) {
-  int centerCol = win->_maxx / 2;
-  int halfLength = 10 / 2;
-
-  int adjustedCol = centerCol - halfLength;
-
-  mvwprintw(win, startRow, adjustedCol, "Snake Game!");
-}
-
-
-struct snakeNode *InitSnake(void) {
+struct snakeNode *InitSnake(WINDOW *border) {
   int midY = (LINES - 3) / 2;
   int midX = (COLS - 1) / 2;
 
@@ -39,7 +15,8 @@ struct snakeNode *InitSnake(void) {
   snakeHead->y = midY;
   snakeHead->direction = DOWN;
   snakeHead->speed = BASESPEED;
-  mvaddch(midY, midX, ACS_DARROW);
+  snakeHead->border = border;
+  mvwaddch(border, midY, midX, ACS_DARROW);
   refresh();
   return snakeHead;
 }
@@ -78,20 +55,27 @@ void MoveSnake(struct snakeNode *head) {
     nextDirection = ACS_RARROW;
   }
 
-  
-  mvaddch(nextY, nextX, nextDirection);
-  mvaddch(head->y, head->x, 32);
+  char curch = mvwinch(head->border, nextY, nextX);
+
+  mvwaddch(head->border, nextY, nextX, nextDirection);
+  mvwaddch(head->border, head->y, head->x, 32);
   head->y = nextY;
   head->x = nextX;
+
+
+  if (curch == FOOD) {
+    AddFood(head->border);
+  }
+
 }
 
 void *movementThread(void *arg) {
   struct snakeNode *head = (struct snakeNode*)arg;
   while(1) {
-    
+        /* refresh(); */
     usleep(head->speed);
     MoveSnake(head);
-    refresh();
+    wrefresh(head->border);
   }
   return 0;
 }

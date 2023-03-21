@@ -5,7 +5,8 @@
 #include <pthread.h>
 
 #include "snakes.h"
-
+#include "food.h"
+#include "board.h"
 
 int main(int argc, char *argv[]) {
   initscr();
@@ -13,12 +14,12 @@ int main(int argc, char *argv[]) {
   noecho();
   keypad(stdscr, TRUE);
   curs_set(0);
-  Setup();
-  struct snakeNode *head = InitSnake();
+  WINDOW *border = Setup();
+  struct snakeNode *head = InitSnake(border);
 
   pthread_t movement;
   pthread_create(&movement, NULL, &movementThread, head);
-  
+   
   while(1) {
     int key = getch();
 

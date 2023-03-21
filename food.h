@@ -2,4 +2,4 @@
 #define EMPTY ' '
 #define FOOD 'X'
 
-void AddFood(void);
+void AddFood(WINDOW *border);

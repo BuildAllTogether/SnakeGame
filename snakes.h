@@ -1,7 +1,7 @@
 
 #define SNAKEHEADSTART 'd'
 #define SNAKEBODY 'O'
-#define BASESPEED 500000
+#define BASESPEED 200000
 
 #define UP 1
 #define DOWN 2
@@ -14,11 +14,10 @@ struct snakeNode {
   int y;
   int speed; // in microseconds
   struct snakeNode *next;
+  WINDOW *border;
 };
 
-void Setup(void);
-void PrintGameName(WINDOW *win, int startRow);
-struct snakeNode* InitSnake(void);
+struct snakeNode* InitSnake(WINDOW *border);
 void ChangeDirection(int direction, struct snakeNode *head);
 void MoveSnake(struct snakeNode *head);
 void *movementThread(void *arg);
