@@ -31,48 +31,96 @@ void ChangeDirection(int direction, struct snakeNode *head) {
 }
 
 void MoveSnake(struct snakeNode *head) {
-  int nextX;
-  int nextY;
+  int nextX = head->x;
+  int nextY = head->y;
   chtype nextDirection;
   if (head->direction == UP) {
-    nextX = head->x;
-    nextY = head->y - 1;
+    nextY -= 1;
     nextDirection = ACS_UARROW;
   }
   else if (head->direction == DOWN) {
-    nextX = head->x;
-    nextY = head->y + 1;
+    nextY += 1;
     nextDirection = ACS_DARROW;
   }
   else if (head->direction == LEFT) {
-    nextX = head->x - 1;
-    nextY = head->y;
+    nextX -= 1;
     nextDirection = ACS_LARROW;
   }
   else if (head->direction == RIGHT) {
-    nextX = head->x + 1;
-    nextY = head->y;
+    nextX += 1;
     nextDirection = ACS_RARROW;
   }
 
   char curch = mvwinch(head->border, nextY, nextX);
 
   mvwaddch(head->border, nextY, nextX, nextDirection);
-  mvwaddch(head->border, head->y, head->x, 32);
-  head->y = nextY;
-  head->x = nextX;
-
+  /* mvwaddch(head->border, head->y, head->x, 32); */
+  /* head->y = nextY; */
+  /* head->x = nextX; */
+  
 
   if (curch == FOOD) {
     AddFood(head->border);
+    IncreaseBody(head);
+  }
+  else {
+    struct snakeNode *tail = GetTail(head);
+    mvwaddch(head->border, tail->y, tail->x, 32);
+    ShiftLocation(head, nextX, nextY);
   }
 
+  head->y = nextY;
+  head->x = nextX;
+    
+
 }
+
+struct snakeNode* GetTail(struct snakeNode *head) {
+  struct snakeNode *cur = head;
+  
+  while (cur->next != NULL) {
+    cur = cur->next;
+  }
+  
+  return cur;
+}
+ 
+void ShiftLocation(struct snakeNode *head, int nextX, int nextY) {
+
+  if (head->next != NULL) {
+    struct snakeNode *cur = head;
+    int bx;
+    int by;
+    while (cur != NULL) {
+      bx = cur->x;
+      by= cur->y;
+      
+      cur->x = nextX;
+      cur->y = nextY;
+
+      nextX = bx;
+      nextY = by;
+    }
+  }
+}
+
+
+void IncreaseBody(struct snakeNode *head) {
+  struct snakeNode *tail = GetTail(head);
+  
+  struct snakeNode *next = malloc(sizeof(struct snakeNode));
+  tail->next = next;
+  next->y = tail->y;
+  next->x = tail->x;
+  next->next = NULL;
+  next->border = tail->border;
+  
+}
+
 
 void *movementThread(void *arg) {
   struct snakeNode *head = (struct snakeNode*)arg;
   while(1) {
-        /* refresh(); */
     usleep(head->speed);
     MoveSnake(head);
     wrefresh(head->border);
