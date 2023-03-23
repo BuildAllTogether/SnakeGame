@@ -10,7 +10,7 @@ ifeq ($(OS), Linux)
 endif
 
 CC = gcc
-CFLAGS = -g -Wall -std=c11 
+CFLAGS = -g -Wall
 LDFLAGS := -lncursesw
 
 SOURCEFILES := main.c snakes.c

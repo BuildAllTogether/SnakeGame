@@ -11,8 +11,9 @@ WINDOW * Setup(void) {
   
   /* WINDOW *border = newwin(LINES - 3, COLS - 1, 2, 0); */
   WINDOW *border = newwin(LINES / 2, COLS /3 , LINES / 4, COLS / 3);
-
-  PrintGameName(stdscr, 1);
+  WINDOW *gameName = newwin(3, 20, 10, COLS / 3 + 24);
+  refresh();
+  PrintGameName(gameName);
   box(border, 0, 0);
   refresh();
   AddFood(border);
@@ -20,12 +21,11 @@ WINDOW * Setup(void) {
   return border;
 }
 
-void PrintGameName(WINDOW *win, int startRow) {
-  int centerCol = win->_maxx / 2;
-  int halfLength = 10 / 2;
-
-  int adjustedCol = centerCol - halfLength;
-
-  mvwprintw(win, startRow, adjustedCol, "Snake Game!");
+void PrintGameName(WINDOW *win) {
+  mvwprintw(win, 1, 5, "Snake Game!");
+  wrefresh(win);
 }
 
+void Quit(int reason, WINDOW *border) {
+  
+}

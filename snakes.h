@@ -1,4 +1,4 @@
-
+#include <unistd.h>
 #define SNAKEHEADSTART 'd'
 #define SNAKEBODY 'o'
 #define BASESPEED 200000
@@ -7,6 +7,8 @@
 #define DOWN 2
 #define LEFT 3
 #define RIGHT 4
+
+
 
 struct snakeNode {
   int direction;

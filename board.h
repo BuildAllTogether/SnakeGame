@@ -1,4 +1,4 @@
 
 
 WINDOW *Setup(void);
-void PrintGameName(WINDOW *win, int startRow);
+void PrintGameName(WINDOW *win);

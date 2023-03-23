@@ -62,9 +62,13 @@ void MoveSnake(struct snakeNode *head) {
   /* mvwaddch(head->border, head->y, head->x, 32); */
   /* head->y = nextY; */
   /* head->x = nextX; */
+  int maxX;
+  int maxY;
+  getmaxyx(head->border, maxY, maxX);
   
-
-  if (curch == FOOD) {
+  if (nextX <= 0 || nextX >= maxX || nextY <= 0 || nextY >= maxY) {
+  }
+  else if (curch == FOOD) {
     IncreaseBody(head);
     mvwaddch(head->border, head->y, head->x, SNAKEBODY);
     ShiftLocationNotTail(head,nextX, nextY);
