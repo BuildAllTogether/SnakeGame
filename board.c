@@ -9,7 +9,8 @@
 WINDOW * Setup(void) {
   /* WINDOW *currentWindow = stdscr; */
   
-  WINDOW *border = newwin(LINES - 3, COLS - 1, 2, 0);
+  /* WINDOW *border = newwin(LINES - 3, COLS - 1, 2, 0); */
+  WINDOW *border = newwin(LINES / 2, COLS /3 , LINES / 4, COLS / 3);
 
   PrintGameName(stdscr, 1);
   box(border, 0, 0);

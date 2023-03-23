@@ -7,8 +7,8 @@
 
 
 struct snakeNode *InitSnake(WINDOW *border) {
-  int midY = (LINES - 3) / 2;
-  int midX = (COLS - 1) / 2;
+  int midY = LINES / 4;
+  int midX = COLS / 4;
 
   struct snakeNode *snakeHead = malloc(sizeof(struct snakeNode));
   snakeHead->x = midX;
@@ -22,12 +22,8 @@ struct snakeNode *InitSnake(WINDOW *border) {
 }
 
 void ChangeDirection(int direction, struct snakeNode *head) {
-  int midY = (LINES - 3) / 2;
-  int midX = (COLS - 1) / 2;
-
   head->direction = direction;
-  /* mvaddch(head->y, head->x, direction); */
-  /* refresh(); */
+
 }
 
 void MoveSnake(struct snakeNode *head) {
@@ -62,24 +58,27 @@ void MoveSnake(struct snakeNode *head) {
   if (curch == FOOD) {
     AddFood(head->border);
     IncreaseBody(head);
+    ShiftLocationNotTail(head,nextX, nextY);
+    mvwaddch(head->border, head->y, head->x, SNAKEBODY);
   }
   else {
     struct snakeNode *tail = GetTail(head);
     
     /* mvprintw(1, 1, tail->y); */
     mvwaddch(head->border, tail->y, tail->x, 32);
+    ShiftLocation(head, nextX, nextY);
     /* ShiftLocation(head, nextX, nextY); */
   }
   
-  mvprintw(1,1, "%d, %d\n", head->x, head->y);
-  head->y = nextY;
-  head->x = nextX;
+  /* mvprintw(1,1, "%d, %d\n", head->x, head->y); */
+  
+  /* head->y = nextY; */
+  /* head->x = nextX; */
 
 }
 
 struct snakeNode* GetTail(struct snakeNode *head) {
   struct snakeNode *cur = head;
-  /* mvprintw(0,0, head->x); */
   
   while (cur->next != NULL) {
     cur = cur->next;
@@ -102,6 +101,27 @@ void ShiftLocation(struct snakeNode *head, int nextX, int nextY) {
 
       nextX = bx;
       nextY = by;
+
+      cur = cur->next;
+  }
+}
+
+void ShiftLocationNotTail(struct snakeNode *head, int nextX, int nextY) {
+  struct snakeNode *cur = head;
+  int bx;
+  int by;
+  
+  while (cur->next != NULL) {
+      bx = cur->x;
+      by= cur->y;
+      
+      cur->x = nextX;
+      cur->y = nextY;
+
+      nextX = bx;
+      nextY = by;
+
+      cur = cur->next;
   }
 }
 

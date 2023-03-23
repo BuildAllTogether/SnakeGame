@@ -22,6 +22,7 @@ void ChangeDirection(int direction, struct snakeNode *head);
 void MoveSnake(struct snakeNode *head);
 struct snakeNode* GetTail(struct snakeNode *head);
 void ShiftLocation(struct snakeNode *head, int nextX, int nextY);
+void ShiftLocationNotTail(struct snakeNode *head, int nextX, int nextY);
 void IncreaseBody(struct snakeNode *head);
 void *movementThread(void *arg);
 

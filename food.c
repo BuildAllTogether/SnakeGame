@@ -7,6 +7,8 @@
 
 void AddFood(WINDOW *border) {
   srand(time(NULL));
+
+  /* mvprintw(0,0, "%d, %d \n", COLS, LINES); */
   int x = (rand() % (COLS - 1 - 2 + 1)) + 2;
   int y = (rand() % (LINES - 3 + 4 + 1)) + 4;
   wmove(border, y, x);
