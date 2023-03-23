@@ -10,13 +10,13 @@ void AddFood(WINDOW *border) {
 
   /* mvprintw(0,0, "%d, %d \n", COLS, LINES); */
   // formula  num = (rand() % (upper – lower + 1)) + lower
-  int x = (rand() % (COLS / 3 - COLS / 8 + 1)) + COLS / 8;
-  int y = (rand() % (LINES / 2 - LINES / 6 + 1)) + LINES / 6;
+  int x = (rand() % (COLS + 1));
+  int y = (rand() % (LINES + 1));
   wmove(border, y, x);
 
   while(winch(border) != EMPTY) {
-    x = (rand() % (COLS / 3 - COLS / 4 + 1)) + COLS / 4;
-    y = (rand() % (LINES / 3 - LINES / 4+ 1)) + LINES / 4;
+    x = (rand() % (COLS + 1));
+    y = (rand() % (LINES + 1));
     wmove(border, y, x);
   }
 

@@ -56,15 +56,16 @@ void MoveSnake(struct snakeNode *head) {
   
 
   if (curch == FOOD) {
-    AddFood(head->border);
     IncreaseBody(head);
-    ShiftLocationNotTail(head,nextX, nextY);
     mvwaddch(head->border, head->y, head->x, SNAKEBODY);
+    ShiftLocationNotTail(head,nextX, nextY);
+    AddFood(head->border);
   }
   else {
     struct snakeNode *tail = GetTail(head);
     
     /* mvprintw(1, 1, tail->y); */
+    mvwaddch(head->border, head->y, head->x, SNAKEBODY);
     mvwaddch(head->border, tail->y, tail->x, 32);
     ShiftLocation(head, nextX, nextY);
     /* ShiftLocation(head, nextX, nextY); */
