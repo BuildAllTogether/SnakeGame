@@ -1,7 +1,7 @@
 #include <unistd.h>
 #define SNAKEHEADSTART 'd'
 #define SNAKEBODY 'o'
-#define BASESPEED 200000
+#define BASESPEED 500000
 
 #define UP 1
 #define DOWN 2
@@ -17,6 +17,8 @@ struct snakeNode {
   int speed; // in microseconds
   struct snakeNode *next;
   WINDOW *border;
+  int score;
+  bool alive;
 };
 
 struct snakeNode* InitSnake(WINDOW *border);

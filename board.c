@@ -1,10 +1,12 @@
 #include <stdlib.h>
 #include <time.h>
 #include <curses.h>
+#include <stdbool.h>
 
 #include "snakes.h"
 #include "food.h"
 #include "board.h"
+
 
 WINDOW * Setup(void) {
   /* WINDOW *currentWindow = stdscr; */
@@ -26,6 +28,13 @@ void PrintGameName(WINDOW *win) {
   wrefresh(win);
 }
 
-void Quit(int reason, WINDOW *border) {
-  
+void Quit(int reason, WINDOW *border, struct snakeNode *dead) {
+  WINDOW *endGameWindow = newwin(10, 25, 20, COLS / 3 + 20);
+  box(endGameWindow, 0, 0);
+
+  mvwprintw(endGameWindow, 2, 3, "You hit something!");
+  mvwprintw(endGameWindow, 4, 3, "Score: %d", dead->score);
+  wrefresh(endGameWindow);
+  wrefresh(border);
+  refresh();
 }

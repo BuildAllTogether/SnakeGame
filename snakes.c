@@ -1,10 +1,11 @@
 #include <stdlib.h>
 #include <time.h>
 #include <curses.h>
+#include <stdbool.h>
 
 #include "snakes.h"
 #include "food.h"
-
+#include "board.h"
 
 struct snakeNode *InitSnake(WINDOW *border) {
   int midY = LINES / 4;
@@ -17,6 +18,8 @@ struct snakeNode *InitSnake(WINDOW *border) {
   snakeHead->speed = BASESPEED;
   snakeHead->border = border;
   mvwaddch(border, midY, midX, ACS_DARROW);
+  snakeHead->score = 0;
+  snakeHead->alive = true;
   return snakeHead;
 }
 
@@ -32,7 +35,6 @@ void ChangeDirection(int direction, struct snakeNode *head) {
   else {
     head->direction = direction;
   }
-  
 }
 
 void MoveSnake(struct snakeNode *head) {
@@ -59,14 +61,18 @@ void MoveSnake(struct snakeNode *head) {
   char curch = mvwinch(head->border, nextY, nextX);
 
   mvwaddch(head->border, nextY, nextX, nextDirection);
-  /* mvwaddch(head->border, head->y, head->x, 32); */
-  /* head->y = nextY; */
-  /* head->x = nextX; */
+
   int maxX;
   int maxY;
   getmaxyx(head->border, maxY, maxX);
   
   if (nextX <= 0 || nextX >= maxX || nextY <= 0 || nextY >= maxY) {
+    head->alive = false;
+    Quit(0, head->border, head);
+  }
+  else if (curch == SNAKEBODY) {
+    head->alive = false;
+    Quit(1, head->border, head);
   }
   else if (curch == FOOD) {
     IncreaseBody(head);
@@ -77,17 +83,10 @@ void MoveSnake(struct snakeNode *head) {
   else {
     struct snakeNode *tail = GetTail(head);
     
-    /* mvprintw(1, 1, tail->y); */
     mvwaddch(head->border, head->y, head->x, SNAKEBODY);
     mvwaddch(head->border, tail->y, tail->x, 32);
     ShiftLocation(head, nextX, nextY);
-    /* ShiftLocation(head, nextX, nextY); */
   }
-  
-  /* mvprintw(1,1, "%d, %d\n", head->x, head->y); */
-  
-  /* head->y = nextY; */
-  /* head->x = nextX; */
 
 }
 
@@ -141,6 +140,7 @@ void ShiftLocationNotTail(struct snakeNode *head, int nextX, int nextY) {
 
 
 void IncreaseBody(struct snakeNode *head) {
+  head->score += 1;
   struct snakeNode *tail = GetTail(head);
   
   struct snakeNode *next = malloc(sizeof(struct snakeNode));
@@ -155,7 +155,7 @@ void IncreaseBody(struct snakeNode *head) {
 
 void *movementThread(void *arg) {
   struct snakeNode *head = (struct snakeNode*)arg;
-  while(1) {
+  while(head->alive) {
     usleep(head->speed);
     MoveSnake(head);
     
