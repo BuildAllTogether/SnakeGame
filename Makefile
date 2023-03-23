@@ -41,4 +41,4 @@ tests:  snakes.o food.o board.o test.o
 
 .PHONY: clean
 clean:
-	rm -r -f snakes *.o *~ main
+	rm -r -f snakes *.o *~ main tests

@@ -17,13 +17,22 @@ struct snakeNode *InitSnake(WINDOW *border) {
   snakeHead->speed = BASESPEED;
   snakeHead->border = border;
   mvwaddch(border, midY, midX, ACS_DARROW);
-  refresh();
   return snakeHead;
 }
 
 void ChangeDirection(int direction, struct snakeNode *head) {
-  head->direction = direction;
-
+  if (head->direction == UP && direction == DOWN) {
+  }
+  else if (head->direction == DOWN && direction == UP) {
+  }
+  else if (head->direction == LEFT && direction == RIGHT) {
+  }
+  else if (head->direction == RIGHT && direction == LEFT) {
+  }
+  else {
+    head->direction = direction;
+  }
+  
 }
 
 void MoveSnake(struct snakeNode *head) {
