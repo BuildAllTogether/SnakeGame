@@ -1,7 +1,7 @@
 #include <unistd.h>
 #define SNAKEHEADSTART 'd'
 #define SNAKEBODY 'o'
-#define BASESPEED 500000
+#define BASESPEED 200000
 
 #define UP 1
 #define DOWN 2
@@ -12,6 +12,7 @@
 
 struct snakeNode {
   int direction;
+  int bufferDirection;
   int x;
   int y;
   int speed; // in microseconds
@@ -29,6 +30,7 @@ void ShiftLocation(struct snakeNode *head, int nextX, int nextY);
 void ShiftLocationNotTail(struct snakeNode *head, int nextX, int nextY);
 void IncreaseBody(struct snakeNode *head);
 void *movementThread(void *arg);
+void checkDirection(struct snakeNode *head);
 
 
 

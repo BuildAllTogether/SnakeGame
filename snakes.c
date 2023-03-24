@@ -15,16 +15,19 @@ struct snakeNode *InitSnake(WINDOW *border) {
   snakeHead->x = midX;
   snakeHead->y = midY;
   snakeHead->direction = DOWN;
+  snakeHead->bufferDirection = DOWN;
   snakeHead->speed = BASESPEED;
   snakeHead->border = border;
   mvwaddch(border, midY, midX, ACS_DARROW);
   snakeHead->score = 0;
   snakeHead->alive = true;
+  MoveSnake(snakeHead);
+  wrefresh(border);
   return snakeHead;
 }
 
 void ChangeDirection(int direction, struct snakeNode *head) {
-  if (head->direction == UP && direction == DOWN) {
+  if (head->direction == UP && head->direction == DOWN) {
   }
   else if (head->direction == DOWN && direction == UP) {
   }
@@ -35,12 +38,32 @@ void ChangeDirection(int direction, struct snakeNode *head) {
   else {
     head->direction = direction;
   }
+  MoveSnake(head);
+  wrefresh(head->border);
+  usleep(head->speed);
+  /* head->bufferDirection = direction; */
+}
+
+void checkDirection(struct snakeNode *head) {
+  if (head->direction == UP && head->bufferDirection == DOWN) {
+  }
+  else if (head->direction == DOWN && head->bufferDirection == UP) {
+  }
+  else if (head->direction == LEFT && head->bufferDirection == RIGHT) {
+  }
+  else if (head->direction == RIGHT && head->bufferDirection == LEFT) {
+  }
+  else {
+    head->direction = head->bufferDirection;
+  }
+  
 }
 
 void MoveSnake(struct snakeNode *head) {
   int nextX = head->x;
   int nextY = head->y;
   chtype nextDirection;
+  /* checkDirection(head); */
   if (head->direction == UP) {
     nextY -= 1;
     nextDirection = ACS_UARROW;
