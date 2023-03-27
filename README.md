@@ -3,6 +3,7 @@ Learning to use C by making a simple terminal snake game and eventually use an a
 
 ## Requirements
 We need curses.h
+
 ```sudo apt install libncurses5-dev libncursesw5-dev```
 
 ## Controls/Info
