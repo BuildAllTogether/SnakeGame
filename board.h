@@ -1,5 +1,5 @@
 
 
-WINDOW *Setup(void);
+struct allwindows *Setup(void);
 void PrintGameName(WINDOW *win);
-void Quit(int reason, WINDOW *border, struct snakeNode *dead);
+void PrintScore(WINDOW *win);

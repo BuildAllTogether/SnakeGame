@@ -1,7 +1,8 @@
 #include <unistd.h>
+
 #define SNAKEHEADSTART 'd'
 #define SNAKEBODY 'o'
-#define BASESPEED 200000
+#define BASESPEED 250000
 
 #define UP 1
 #define DOWN 2
@@ -25,10 +26,16 @@ struct snakeNode {
   WINDOW *border;
   int score;
   bool alive;
+  WINDOW *scoreWindow;
 };
 
+struct allwindows {
+  WINDOW *board;
+  WINDOW *name;
+  WINDOW *score;
+};
 
-struct snakeNode* InitSnake(WINDOW *border);
+struct snakeNode *InitSnake(struct allwindows *allWindows);
 void ChangeDirection(int direction, struct snakeNode *head);
 void RemoveDirection(struct snakeNode *head);
 int DirectionLength(struct direction *direction);
@@ -42,4 +49,5 @@ void *movementThread(void *arg);
 void checkDirection(struct snakeNode *head);
 bool NotLongerThan(struct direction *head, int length);
 bool IsOpposite(struct snakeNode *head, int direction);
+void Quit(int reason, WINDOW *border, struct snakeNode *dead);
 

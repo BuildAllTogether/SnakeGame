@@ -3,24 +3,32 @@
 #include <curses.h>
 #include <stdbool.h>
 
+
 #include "snakes.h"
-#include "food.h"
 #include "board.h"
+#include "food.h"
 
 
-WINDOW * Setup(void) {
+struct allwindows *Setup(void) {
   /* WINDOW *currentWindow = stdscr; */
   
   /* WINDOW *border = newwin(LINES - 3, COLS - 1, 2, 0); */
   WINDOW *border = newwin(LINES / 2, COLS /3 , LINES / 4, COLS / 3);
   WINDOW *gameName = newwin(3, 20, 10, COLS / 3 + 24);
+  WINDOW *score = newwin(LINES / 2 + 2, 20, LINES - 14, COLS / 3 + 1);
+  struct allwindows *allWindows = (struct allwindows *) malloc(sizeof(struct allwindows));
+  allWindows->board = border;
+  allWindows->name = gameName;
+  allWindows->score = score;
+  
   refresh();
   PrintGameName(gameName);
+  PrintScore(score);
   box(border, 0, 0);
   refresh();
   AddFood(border);
   wrefresh(border);
-  return border;
+  return allWindows;
 }
 
 void PrintGameName(WINDOW *win) {
@@ -28,13 +36,9 @@ void PrintGameName(WINDOW *win) {
   wrefresh(win);
 }
 
-void Quit(int reason, WINDOW *border, struct snakeNode *dead) {
-  WINDOW *endGameWindow = newwin(10, 25, 20, COLS / 3 + 20);
-  box(endGameWindow, 0, 0);
-
-  mvwprintw(endGameWindow, 2, 3, "You hit something!");
-  mvwprintw(endGameWindow, 4, 3, "Score: %d", dead->score);
-  wrefresh(endGameWindow);
-  wrefresh(border);
-  refresh();
+void PrintScore(WINDOW *win) {
+  wprintw(win, "Score: 0");
+  wrefresh(win);
 }
+
+

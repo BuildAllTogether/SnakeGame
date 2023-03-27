@@ -14,8 +14,8 @@ int main(int argc, char *argv[]) {
   noecho();
   keypad(stdscr, TRUE);
   curs_set(0);
-  WINDOW *border = Setup();
-  struct snakeNode *head = InitSnake(border);
+  struct allwindows *allWindows = Setup();
+  struct snakeNode *head = InitSnake(allWindows);
   
   pthread_t movement;
   pthread_create(&movement, NULL, &movementThread, head);

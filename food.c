@@ -15,12 +15,9 @@ void AddFood(WINDOW *border) {
   getparyx(border, startY, startX);
   getmaxyx(border, maxY, maxX);
   
-  /* mvprintw(0,0, "%d, %d \n", COLS, LINES); */
-  // formula  num = (rand() % (upper – lower + 1)) + lower
   int x = (rand() % (maxX - startX + 1)) + startX;
   int y = (rand() % (maxY - startY + 1)) + startY;
-  mvprintw(0, 0, "%d, %d", startX, startY);
-  mvprintw(1, 0, "%d, %d", maxX, maxY);
+
   wmove(border, y, x);
   wrefresh(border);
 

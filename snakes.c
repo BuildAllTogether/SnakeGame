@@ -3,13 +3,16 @@
 #include <curses.h>
 #include <stdbool.h>
 
+
 #include "snakes.h"
 #include "food.h"
 #include "board.h"
 
-struct snakeNode *InitSnake(WINDOW *border) {
+
+struct snakeNode *InitSnake(struct allwindows *allWindows) {
   int midY = LINES / 4;
   int midX = COLS / 4;
+  WINDOW *border = allWindows->board;
 
   struct snakeNode *snakeHead = malloc(sizeof(struct snakeNode));
   snakeHead->x = midX;
@@ -21,6 +24,7 @@ struct snakeNode *InitSnake(WINDOW *border) {
   mvwaddch(border, midY, midX, ACS_DARROW);
   snakeHead->score = 0;
   snakeHead->alive = true;
+  snakeHead->scoreWindow = allWindows->score;
   MoveSnake(snakeHead);
   wrefresh(border);
   return snakeHead;
@@ -33,14 +37,14 @@ void ChangeDirection(int direction, struct snakeNode *head) {
     struct direction *nextDir = malloc(sizeof(struct direction));
     nextDir->dir = direction;
     if (dir != NULL) {
-      dir->next = nextDir;
+      if (!IsOpposite(head, direction)) {
+	dir->next = nextDir;
+      }
     }
     else {
       head->direction = nextDir;
     }
   }
-  /* MoveSnake(head); */
-  /* wrefresh(head->border); */
 }
 
 int DirectionLength(struct direction *direction) {
@@ -64,9 +68,7 @@ void MoveSnake(struct snakeNode *head) {
   int nextX = head->x;
   int nextY = head->y;
   chtype nextDirection;
-  /* mvwprintw(stdscr, 3, 0, "%d", head->direction->dir);  */
-  /* mvwprintw(stdscr, 3, 0, "x: %d, y: %d, direction: %d", nextXhead->direction->dir); */
-  /* checkDirection(head); */
+
   if (head->direction->dir == UP) {
     nextY -= 1;
     nextDirection = ACS_UARROW;
@@ -104,6 +106,8 @@ void MoveSnake(struct snakeNode *head) {
     IncreaseBody(head);
     mvwaddch(head->border, head->y, head->x, SNAKEBODY);
     ShiftLocationNotTail(head,nextX, nextY);
+    wprintw(head->scoreWindow, "\rScore: %d", head->score);
+    wrefresh(head->scoreWindow);
     AddFood(head->border);
   }
   else {
@@ -234,9 +238,15 @@ bool IsOpposite(struct snakeNode *head, int direction) {
     return false;
   }
 }
-
-
-
   
+void Quit(int reason, WINDOW *border, struct snakeNode *dead) {
+  WINDOW *endGameWindow = newwin(10, 25, 20, COLS / 3 + 20);
+  box(endGameWindow, 0, 0);
 
+  mvwprintw(endGameWindow, 2, 3, "You hit something!");
+  mvwprintw(endGameWindow, 4, 3, "Score: %d", dead->score);
+  wrefresh(endGameWindow);
+  wrefresh(border);
+  refresh();
+}
   
