@@ -28,17 +28,17 @@ struct snakeNode *InitSnake(WINDOW *border) {
 
 void ChangeDirection(int direction, struct snakeNode *head) {
   
-  /* if (NotLongerThan(head->direction, 1)) { */
-  /*   struct direction *dir = GetDirectionTail(head->direction); */
-  /*   struct direction *nextDir = malloc(sizeof(struct direction)); */
-  /*   nextDir->dir = direction; */
-  /*   if (dir != NULL) { */
-  /*     dir->next = nextDir; */
-  /*   } */
-  /*   else { */
-  /*     head->direction = nextDir; */
-  /*   } */
-  /* } */
+  if (NotLongerThan(head->direction, 1)) {
+    struct direction *dir = GetDirectionTail(head->direction);
+    struct direction *nextDir = malloc(sizeof(struct direction));
+    nextDir->dir = direction;
+    if (dir != NULL) {
+      dir->next = nextDir;
+    }
+    else {
+      head->direction = nextDir;
+    }
+  }
   /* MoveSnake(head); */
   /* wrefresh(head->border); */
 }
@@ -113,7 +113,7 @@ void MoveSnake(struct snakeNode *head) {
     mvwaddch(head->border, tail->y, tail->x, 32);
     ShiftLocation(head, nextX, nextY);
   }
-  /* RemoveDirection(head); */
+  RemoveDirection(head);
 
 }
 

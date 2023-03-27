@@ -17,8 +17,8 @@ int main(int argc, char *argv[]) {
   WINDOW *border = Setup();
   struct snakeNode *head = InitSnake(border);
   
-  /* pthread_t movement; */
-  /* pthread_create(&movement, NULL, &movementThread, head); */
+  pthread_t movement;
+  pthread_create(&movement, NULL, &movementThread, head);
    
   while(1) {
     int key = getch();
