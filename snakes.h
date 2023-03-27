@@ -28,8 +28,6 @@ struct snakeNode {
 };
 
 
-  
-
 struct snakeNode* InitSnake(WINDOW *border);
 void ChangeDirection(int direction, struct snakeNode *head);
 void RemoveDirection(struct snakeNode *head);

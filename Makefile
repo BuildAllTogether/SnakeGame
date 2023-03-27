@@ -33,7 +33,7 @@ main.o: main.c
 	$(CC) -c $(CFLAGS) main.c
 
 snakes: snakes.o food.o board.o main.o
-	$(CC) $(CFLAGS) -o snakes snakes.o food.o board.o main.o $(LDFLAGS) -lpthread
+	$(CC) $(CFLAGS) -g -o snakes snakes.o food.o board.o main.o $(LDFLAGS) -lpthread
 
 tests:  snakes.o food.o board.o test.o
 	gcc -Wall -L $(CUNIT_PATH_PREFIX)lib -I $(CUNIT_PATH_PREFIX)include/$(CUNIT_DIRECTORY) -o tests snakes.o food.o board.o test.o -lcunit $(LDFLAGS)

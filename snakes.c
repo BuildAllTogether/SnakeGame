@@ -65,6 +65,7 @@ void MoveSnake(struct snakeNode *head) {
   int nextY = head->y;
   chtype nextDirection;
   /* mvwprintw(stdscr, 3, 0, "%d", head->direction->dir);  */
+  /* mvwprintw(stdscr, 3, 0, "x: %d, y: %d, direction: %d", nextXhead->direction->dir); */
   /* checkDirection(head); */
   if (head->direction->dir == UP) {
     nextY -= 1;
