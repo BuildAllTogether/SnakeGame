@@ -14,8 +14,8 @@ struct snakeNode *InitSnake(WINDOW *border) {
   struct snakeNode *snakeHead = malloc(sizeof(struct snakeNode));
   snakeHead->x = midX;
   snakeHead->y = midY;
-  snakeHead->direction = DOWN;
-  snakeHead->bufferDirection = DOWN;
+  snakeHead->direction = malloc(sizeof(struct direction));
+  snakeHead->direction->dir = DOWN;
   snakeHead->speed = BASESPEED;
   snakeHead->border = border;
   mvwaddch(border, midY, midX, ACS_DARROW);
@@ -27,56 +27,58 @@ struct snakeNode *InitSnake(WINDOW *border) {
 }
 
 void ChangeDirection(int direction, struct snakeNode *head) {
-  if (head->direction == UP && head->direction == DOWN) {
-  }
-  else if (head->direction == DOWN && direction == UP) {
-  }
-  else if (head->direction == LEFT && direction == RIGHT) {
-  }
-  else if (head->direction == RIGHT && direction == LEFT) {
-  }
-  else {
-    head->direction = direction;
-  }
-  MoveSnake(head);
-  wrefresh(head->border);
-  usleep(head->speed);
-  /* head->bufferDirection = direction; */
+  
+  /* if (NotLongerThan(head->direction, 1)) { */
+  /*   struct direction *dir = GetDirectionTail(head->direction); */
+  /*   struct direction *nextDir = malloc(sizeof(struct direction)); */
+  /*   nextDir->dir = direction; */
+  /*   if (dir != NULL) { */
+  /*     dir->next = nextDir; */
+  /*   } */
+  /*   else { */
+  /*     head->direction = nextDir; */
+  /*   } */
+  /* } */
+  /* MoveSnake(head); */
+  /* wrefresh(head->border); */
 }
 
-void checkDirection(struct snakeNode *head) {
-  if (head->direction == UP && head->bufferDirection == DOWN) {
+int DirectionLength(struct direction *direction) {
+  struct direction *cur = direction;
+  int directionLength = 0;
+  while (cur != NULL) {
+    cur = cur->next;
+    directionLength += 1;
   }
-  else if (head->direction == DOWN && head->bufferDirection == UP) {
-  }
-  else if (head->direction == LEFT && head->bufferDirection == RIGHT) {
-  }
-  else if (head->direction == RIGHT && head->bufferDirection == LEFT) {
-  }
-  else {
-    head->direction = head->bufferDirection;
-  }
+  return directionLength;
+}
   
+void RemoveDirection(struct snakeNode *head) {
+  int directionLength = DirectionLength(head->direction);
+  if (directionLength >= 2) {
+    head->direction = head->direction->next;
+  }
 }
 
 void MoveSnake(struct snakeNode *head) {
   int nextX = head->x;
   int nextY = head->y;
   chtype nextDirection;
+  /* mvwprintw(stdscr, 3, 0, "%d", head->direction->dir);  */
   /* checkDirection(head); */
-  if (head->direction == UP) {
+  if (head->direction->dir == UP) {
     nextY -= 1;
     nextDirection = ACS_UARROW;
   }
-  else if (head->direction == DOWN) {
+  else if (head->direction->dir == DOWN) {
     nextY += 1;
     nextDirection = ACS_DARROW;
   }
-  else if (head->direction == LEFT) {
+  else if (head->direction->dir == LEFT) {
     nextX -= 1;
     nextDirection = ACS_LARROW;
   }
-  else if (head->direction == RIGHT) {
+  else if (head->direction->dir == RIGHT) {
     nextX += 1;
     nextDirection = ACS_RARROW;
   }
@@ -104,16 +106,17 @@ void MoveSnake(struct snakeNode *head) {
     AddFood(head->border);
   }
   else {
-    struct snakeNode *tail = GetTail(head);
+    struct snakeNode *tail = GetSnakeTail(head);
     
     mvwaddch(head->border, head->y, head->x, SNAKEBODY);
     mvwaddch(head->border, tail->y, tail->x, 32);
     ShiftLocation(head, nextX, nextY);
   }
+  /* RemoveDirection(head); */
 
 }
 
-struct snakeNode* GetTail(struct snakeNode *head) {
+struct snakeNode* GetSnakeTail(struct snakeNode *head) {
   struct snakeNode *cur = head;
   
   while (cur->next != NULL) {
@@ -121,6 +124,15 @@ struct snakeNode* GetTail(struct snakeNode *head) {
   }
   
   return cur;
+}
+ 
+ 
+struct direction *GetDirectionTail(struct direction *direction) {
+  struct direction *curDir = direction;
+  while (curDir->next != NULL) {
+    curDir = curDir->next;
+  }
+  return curDir;
 }
  
 void ShiftLocation(struct snakeNode *head, int nextX, int nextY) {
@@ -164,7 +176,7 @@ void ShiftLocationNotTail(struct snakeNode *head, int nextX, int nextY) {
 
 void IncreaseBody(struct snakeNode *head) {
   head->score += 1;
-  struct snakeNode *tail = GetTail(head);
+  struct snakeNode *tail = GetSnakeTail(head);
   
   struct snakeNode *next = malloc(sizeof(struct snakeNode));
   tail->next = next;
@@ -181,11 +193,49 @@ void *movementThread(void *arg) {
   while(head->alive) {
     usleep(head->speed);
     MoveSnake(head);
-    
     wrefresh(head->border);
   }
   return 0;
 }
 
+
+bool NotLongerThan(struct direction *head, int length) {
+  struct direction *cur = head;
+  int directionLength = 0;
+  while (cur != NULL) {
+    cur = cur->next;
+    directionLength += 1;
+  }
+
+  if (directionLength <= length) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+
+bool IsOpposite(struct snakeNode *head, int direction) {
+  if (head->direction->dir == UP && direction == DOWN) {
+    return true;
+  }
+  else if (head->direction->dir == DOWN && direction == UP) {
+    return true;
+  }
+  else if (head->direction->dir == LEFT && direction == RIGHT) {
+    return true;
+  }
+  else if (head->direction->dir == RIGHT && direction == LEFT) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+
+
+  
 
   

@@ -9,9 +9,14 @@
 #define RIGHT 4
 
 
+struct direction {
+  int dir;
+  struct direction *next;
+};
+
 
 struct snakeNode {
-  int direction;
+  struct direction *direction;
   int bufferDirection;
   int x;
   int y;
@@ -22,15 +27,21 @@ struct snakeNode {
   bool alive;
 };
 
+
+  
+
 struct snakeNode* InitSnake(WINDOW *border);
 void ChangeDirection(int direction, struct snakeNode *head);
+void RemoveDirection(struct snakeNode *head);
+int DirectionLength(struct direction *direction);
 void MoveSnake(struct snakeNode *head);
-struct snakeNode* GetTail(struct snakeNode *head);
+struct snakeNode* GetSnakeTail(struct snakeNode *head);
+struct direction *GetDirectionTail(struct direction *direction);
 void ShiftLocation(struct snakeNode *head, int nextX, int nextY);
 void ShiftLocationNotTail(struct snakeNode *head, int nextX, int nextY);
 void IncreaseBody(struct snakeNode *head);
 void *movementThread(void *arg);
 void checkDirection(struct snakeNode *head);
-
-
+bool NotLongerThan(struct direction *head, int length);
+bool IsOpposite(struct snakeNode *head, int direction);
 
